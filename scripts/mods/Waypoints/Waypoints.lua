@@ -165,110 +165,112 @@ end)
 mod.waypoint_render = function(self, dt)
 	mod:pcall(function()
 		-- if mod.waypoints_ready and Managers.world:world("level_world") then
-		if mod.waypoints_ready and not Managers.ui._ingame_ui.current_view and Managers.world:world("level_world") then
+		if Managers.ui._ingame_ui then
+			if mod.waypoints_ready and not Managers.ui._ingame_ui.current_view and Managers.world:world("level_world") then
 
-			local num_waypoints_active = 0
+				local num_waypoints_active = 0
 
-			for _, charwp in pairs(mod.waypoints) do
-				if charwp.waypoint_is_set then
-					if not mod.waypoint_gui and Managers.world:world("top_ingame_view") then
-						mod:create_gui()
-					end
-					if charwp.waypoint_current_time < mod.waypoint_lifespan_in_seconds then
-						charwp.waypoint_current_time = charwp.waypoint_current_time + dt
-
-						-- Increment waypoints var so we can position them properly
-						num_waypoints_active = num_waypoints_active + 1
-
-						local player = Managers.player:local_player()
-
-						if player.player_unit then
-
-							-- Vector3 position of the waypoint in the world
-							local waypoint_position = Vector3(0,0,0)
-							local waypoint_on_me = false
-
-							-- If waypoint set to follow character, update the vector to the player_unit's position
-							if charwp.waypoint_should_follow and charwp.unit_to_follow then
-								waypoint_position = POSITION_LOOKUP[charwp.unit_to_follow]
-
-								if charwp.unit_to_follow == player.player_unit then
-									waypoint_on_me = true
-								end
-							-- Else, use the defined waypoint
-							else
-								waypoint_position = Vector3(charwp.waypoint_vector[1], charwp.waypoint_vector[2], charwp.waypoint_vector[3])
-							end
-
-							local world = Managers.world:world("level_world")
-							local viewport = ScriptWorld.viewport(world, player.viewport_name)
-							local camera = ScriptViewport.camera(viewport)
-							local scale = UIResolutionScale()
-
-							local waypoint_position2d, depth = Camera.world_to_screen(camera, waypoint_position)
-							local player_pos = ScriptCamera.position(camera)
-
-							local distance = Vector3.distance(player_pos, waypoint_position) / 5
-
-							if mod.clear_waypoint_when_reached and distance < 0.4 and not waypoint_on_me then
-								mod.clear_waypoint(charwp)
-								return
-							end
-
-							local waypoint_size = math.max(64 / distance, 24)
-							local waypoint_size_behind = 32
-
-							local screen_width = RESOLUTION_LOOKUP.res_w
-							local screen_height = RESOLUTION_LOOKUP.res_h
-							local center_pos_x = screen_width / 2
-							local center_pos_y = (screen_height / 2)
-
-							local first_person_extension = ScriptUnit.extension(player.player_unit, "first_person_system")
-							local player_rotation = first_person_extension:current_rotation()
-
-							local player_direction_forward = Quaternion.forward(player_rotation)
-							player_direction_forward = Vector3.normalize(Vector3.flat(player_direction_forward))
-
-							local player_direction_right = Quaternion.right(player_rotation)
-							player_direction_right = Vector3.normalize(Vector3.flat(player_direction_right))
-
-							local offset = waypoint_position - player_pos
-
-							local direction = Vector3.normalize(Vector3.flat(offset))
-
-							local player_forward_dot = Vector3.dot(player_direction_forward, direction)
-							local player_right_dot = Vector3.dot(player_direction_right, direction)
-
-							local is_behind = (player_forward_dot < 0 and true) or false
-
-							local x, y, is_clamped, is_behind = mod.get_floating_icon_position(waypoint_position2d[1], waypoint_position2d[2], player_forward_dot, player_right_dot)
-
-							local icon_name = "class_icon_"..charwp.name
-
-							if is_clamped or is_behind then
-								if not waypoint_on_me then
-										local arrow_size = Vector2(waypoint_size_behind,waypoint_size_behind)
-										local icon_size = Vector2(waypoint_size_behind,waypoint_size_behind)
-
-										local icon_loc_x = 0
-										local icon_loc_y = 0
-
-										local alpha = math.max(0, 255 - (255 * distance / 5))
-
-										icon_loc_x = x
-										icon_loc_y = y
-
-										Gui.bitmap(mod.waypoint_gui, icon_name, Vector2(icon_loc_x, icon_loc_y), Vector2(waypoint_size_behind, waypoint_size_behind), Color(alpha, 255, 255, 255))
-									end
-								else
-									Gui.bitmap(mod.waypoint_gui, icon_name, Vector2(waypoint_position2d[1], waypoint_position2d[2]), Vector2(waypoint_size, waypoint_size))
-							end
+				for _, charwp in pairs(mod.waypoints) do
+					if charwp.waypoint_is_set then
+						if not mod.waypoint_gui and Managers.world:world("top_ingame_view") then
+							mod:create_gui()
 						end
-					else
-						-- mod:echo('waypoint expired!')
+						if charwp.waypoint_current_time < mod.waypoint_lifespan_in_seconds then
+							charwp.waypoint_current_time = charwp.waypoint_current_time + dt
 
-						charwp.waypoint_is_set = false
-						charwp.waypoint_current_time = 0
+							-- Increment waypoints var so we can position them properly
+							num_waypoints_active = num_waypoints_active + 1
+
+							local player = Managers.player:local_player()
+
+							if player.player_unit then
+
+								-- Vector3 position of the waypoint in the world
+								local waypoint_position = Vector3(0,0,0)
+								local waypoint_on_me = false
+
+								-- If waypoint set to follow character, update the vector to the player_unit's position
+								if charwp.waypoint_should_follow and charwp.unit_to_follow then
+									waypoint_position = POSITION_LOOKUP[charwp.unit_to_follow]
+
+									if charwp.unit_to_follow == player.player_unit then
+										waypoint_on_me = true
+									end
+								-- Else, use the defined waypoint
+								else
+									waypoint_position = Vector3(charwp.waypoint_vector[1], charwp.waypoint_vector[2], charwp.waypoint_vector[3])
+								end
+
+								local world = Managers.world:world("level_world")
+								local viewport = ScriptWorld.viewport(world, player.viewport_name)
+								local camera = ScriptViewport.camera(viewport)
+								local scale = UIResolutionScale()
+
+								local waypoint_position2d, depth = Camera.world_to_screen(camera, waypoint_position)
+								local player_pos = ScriptCamera.position(camera)
+
+								local distance = Vector3.distance(player_pos, waypoint_position) / 5
+
+								if mod.clear_waypoint_when_reached and distance < 0.4 and not waypoint_on_me then
+									mod.clear_waypoint(charwp)
+									return
+								end
+
+								local waypoint_size = math.max(64 / distance, 24)
+								local waypoint_size_behind = 32
+
+								local screen_width = RESOLUTION_LOOKUP.res_w
+								local screen_height = RESOLUTION_LOOKUP.res_h
+								local center_pos_x = screen_width / 2
+								local center_pos_y = (screen_height / 2)
+
+								local first_person_extension = ScriptUnit.extension(player.player_unit, "first_person_system")
+								local player_rotation = first_person_extension:current_rotation()
+
+								local player_direction_forward = Quaternion.forward(player_rotation)
+								player_direction_forward = Vector3.normalize(Vector3.flat(player_direction_forward))
+
+								local player_direction_right = Quaternion.right(player_rotation)
+								player_direction_right = Vector3.normalize(Vector3.flat(player_direction_right))
+
+								local offset = waypoint_position - player_pos
+
+								local direction = Vector3.normalize(Vector3.flat(offset))
+
+								local player_forward_dot = Vector3.dot(player_direction_forward, direction)
+								local player_right_dot = Vector3.dot(player_direction_right, direction)
+
+								local is_behind = (player_forward_dot < 0 and true) or false
+
+								local x, y, is_clamped, is_behind = mod.get_floating_icon_position(waypoint_position2d[1], waypoint_position2d[2], player_forward_dot, player_right_dot)
+
+								local icon_name = "class_icon_"..charwp.name
+
+								if is_clamped or is_behind then
+									if not waypoint_on_me then
+											local arrow_size = Vector2(waypoint_size_behind,waypoint_size_behind)
+											local icon_size = Vector2(waypoint_size_behind,waypoint_size_behind)
+
+											local icon_loc_x = 0
+											local icon_loc_y = 0
+
+											local alpha = math.max(0, 255 - (255 * distance / 5))
+
+											icon_loc_x = x
+											icon_loc_y = y
+
+											Gui.bitmap(mod.waypoint_gui, icon_name, Vector2(icon_loc_x, icon_loc_y), Vector2(waypoint_size_behind, waypoint_size_behind), Color(alpha, 255, 255, 255))
+										end
+									else
+										Gui.bitmap(mod.waypoint_gui, icon_name, Vector2(waypoint_position2d[1], waypoint_position2d[2]), Vector2(waypoint_size, waypoint_size))
+								end
+							end
+						else
+							-- mod:echo('waypoint expired!')
+
+							charwp.waypoint_is_set = false
+							charwp.waypoint_current_time = 0
+						end
 					end
 				end
 			end
