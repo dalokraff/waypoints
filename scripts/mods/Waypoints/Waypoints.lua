@@ -204,7 +204,6 @@ mod.waypoint_render = function(self, dt)
 								local world = Managers.world:world("level_world")
 								local viewport = ScriptWorld.viewport(world, player.viewport_name)
 								local camera = ScriptViewport.camera(viewport)
-								local scale = UIResolutionScale()
 
 								local waypoint_position2d, depth = Camera.world_to_screen(camera, waypoint_position)
 								local player_pos = ScriptCamera.position(camera)
