@@ -1,0 +1,23 @@
+store_copy = {
+  material_contexts = {
+    surface_material = ""
+  }
+
+  shader = "gui:DIFFUSE_MAP"
+
+    textures = {
+      diffuse_map = "textures/Waypoints/store_copy"
+    }
+}
+
+store_copy_masked = {
+    material_contexts = {
+        surface_material = ""
+    }
+
+    shader = "gui_gradient:DIFFUSE_MAP:MASKED"
+
+    textures = {
+        diffuse_map = "textures/Waypoints/store_copy"
+    }
+}

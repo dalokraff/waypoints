@@ -49,14 +49,14 @@ return {
   custom_gui_textures = {
     atlases = {
       {
-        "materials/store_copy",
+        "materials/Waypoints/store_copy",
         "store_copy",
       },
     },
     ui_renderer_injections = {
       {
         "ingame_ui",
-        "materials/store_copy",
+        "materials/Waypoints/store_copy",
       },
     },
   },

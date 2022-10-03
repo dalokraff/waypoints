@@ -1,4 +1,4 @@
-local atlas ={
+store_copy ={
 	store_preview_info_arrow = {
 		size = {
 			20,
@@ -1539,7 +1539,7 @@ local atlas ={
 			0.933594
 		}
 	},
-	store_tag_icon_wh_warriorpriest_common = {
+	store_tag_icon_wh_priest_common = {
 		size = {
 			56,
 			56
@@ -1553,7 +1553,7 @@ local atlas ={
 			0.933594
 		}
 	},
-	store_tag_icon_wh_warriorpriest_rare = {
+	store_tag_icon_wh_priest_rare = {
 		size = {
 			56,
 			56
@@ -1651,7 +1651,7 @@ local atlas ={
 			0.875
 		}
 	},
-	store_tag_icon_wh_warriorpriest_exotic = {
+	store_tag_icon_wh_priest_exotic = {
 		size = {
 			56,
 			56
@@ -1721,7 +1721,7 @@ local atlas ={
 			0.816406
 		}
 	},
-	store_tag_icon_wh_warriorpriest = {
+	store_tag_icon_wh_priest = {
 		size = {
 			56,
 			56
@@ -3165,12 +3165,12 @@ local atlas ={
 	}
 }
 
-local copy = {}
+-- local copy = {}
 
-for key, value in pairs(atlas) do
-  copy["copy_" .. key] = value
-end
+-- for key, value in pairs(atlas) do
+--   copy["copy_" .. key] = value
+-- end
 
-print(copy)
+-- print(copy)
 
-return copy
+return store_copy

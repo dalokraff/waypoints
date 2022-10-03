@@ -128,14 +128,6 @@ mod.waypoints = {
 		waypoint_current_time = 0,
 		waypoint_vector = Vector3(0,0,0)
 	},
-	['victor_priest'] = {
-		name = "victor_priest",
-		waypoint_is_set = false,
-		waypoint_should_follow = false,
-		unit_to_follow = nil,
-		waypoint_current_time = 0,
-		waypoint_vector = Vector3(0,0,0)
-	},
 	['kerillian_waystalker'] = {
 		name = "kerillian_waystalker",
 		waypoint_is_set = false,
@@ -178,6 +170,14 @@ mod.waypoints = {
 	-- },
 
 	--using this as a place holder for WP icon
+	['weapons'] = {
+		name = "weapons",
+		waypoint_is_set = false,
+		waypoint_should_follow = false,
+		unit_to_follow = nil,
+		waypoint_current_time = 0,
+		waypoint_vector = Vector3(0,0,0)
+	},
 	
 }
 
@@ -234,8 +234,7 @@ mod.get_current_character = function(self)
 	local player_unit = player.player_unit 
 	local career_extension = ScriptUnit.extension(player_unit, "career_system")
 	local career_name = career_extension:career_name()
-	mod:echo(career_name)
-	mod:echo(name_to_career_dict[career_name])
+
 	return name_to_career_dict[career_name]
 end
 
@@ -374,8 +373,8 @@ mod.waypoint_render = function(self, dt)
 								local x, y, is_clamped, is_behind = mod.get_floating_icon_position(waypoint_position2d[1], waypoint_position2d[2], player_forward_dot, player_right_dot)
 
 								-- local icon_name = "class_icon_"..charwp.name
-								local career_name = name_to_career_dict[charwp.name]
-								local icon_name = "store_tag_icon_"..career_name
+								-- local career_name = name_to_career_dict[charwp.name]
+								local icon_name = "store_category_icon_"..charwp.name
 
 								local texture_settings = atlas[icon_name]
 								local uv00_table = texture_settings.uv00
@@ -497,7 +496,7 @@ mod.create_gui = function(self)
 			"material", "materials/Waypoints/class_icon_witch_hunter",
 			"material", "materials/Waypoints/class_icon_empire_soldier",
 			"material", "materials/Waypoints/class_icon_bright_wizard",
-			"material", "materials/Waypoints/store_copy"
+			"material", "materials/Waypoints/store_copy",
 			)
 	end
 end
