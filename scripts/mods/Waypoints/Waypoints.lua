@@ -234,8 +234,7 @@ mod.get_current_character = function(self)
 	local player_unit = player.player_unit 
 	local career_extension = ScriptUnit.extension(player_unit, "career_system")
 	local career_name = career_extension:career_name()
-	mod:echo(career_name)
-	mod:echo(name_to_career_dict[career_name])
+	
 	return name_to_career_dict[career_name]
 end
 
