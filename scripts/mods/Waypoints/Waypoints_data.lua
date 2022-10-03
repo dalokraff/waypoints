@@ -45,5 +45,19 @@ return {
       ["default_value"] = {"p", "ctrl"},
       ["action"] = "waypoint_set_self"
     },--]]
-  }
+  },
+  custom_gui_textures = {
+    atlases = {
+      {
+        "materials/store_copy",
+        "store_copy",
+      },
+    },
+    ui_renderer_injections = {
+      {
+        "ingame_ui",
+        "materials/store_copy",
+      },
+    },
+  },
 }
