@@ -3,3 +3,5 @@
 **/bundleV2
 **/*.psd
 *.jpg
+
+*.processed
